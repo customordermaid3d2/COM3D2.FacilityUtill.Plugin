@@ -1,6 +1,7 @@
 ﻿using BepInEx;
 using BepInEx.Configuration;
-using COM3D2.Lilly.Plugin;
+
+using COM3D2.LillyUtill;
 using COM3D2API;
 using System;
 using System.Collections;
@@ -12,9 +13,9 @@ using UnityEngine.SceneManagement;
 
 namespace BepInPluginSample
 {
-    class SampleGUI : MonoBehaviour
+    class FacilityUtillGUI : MonoBehaviour
     {
-        public static SampleGUI instance;
+        public static FacilityUtillGUI instance;
 
         private static ConfigFile config;
 
@@ -42,42 +43,42 @@ namespace BepInPluginSample
             set => IsGUIOn.Value = value;
         }
 
-        internal static SampleGUI Install(GameObject parent,ConfigFile config)
+        internal static FacilityUtillGUI Install(GameObject parent,ConfigFile config)
         {
-            SampleGUI. config = config;
-            instance = parent.GetComponent<SampleGUI>();
+            FacilityUtillGUI. config = config;
+            instance = parent.GetComponent<FacilityUtillGUI>();
             if (instance == null)
             {
-                instance = parent.AddComponent<SampleGUI>();
-                MyLog.LogMessage("GameObjectMgr.Install", instance.name);                
+                instance = parent.AddComponent<FacilityUtillGUI>();
+                FacilityUtillMain.MyLog.LogMessage("GameObjectMgr.Install", instance.name);                
             }
             return instance;
         }
 
         public void Awake()
         {
-            myWindowRect = new MyWindowRect(config);
+            myWindowRect = new MyWindowRect(config, MyAttribute.PLAGIN_FULL_NAME,ho:120);
             IsGUIOn = config.Bind("GUI", "isGUIOn", false);
             ShowCounter = config.Bind("GUI", "isGUIOnKey", new BepInEx.Configuration.KeyboardShortcut(KeyCode.Alpha5, KeyCode.LeftControl));
-            SystemShortcutAPI.AddButton(MyAttribute.PLAGIN_FULL_NAME, new Action(delegate () { SampleGUI.isGUIOn = !SampleGUI.isGUIOn; }), MyAttribute.PLAGIN_NAME + " : " + ShowCounter.Value.ToString(), MyUtill.ExtractResource(BepInPluginSample.Properties.Resources.icon));
+            SystemShortcutAPI.AddButton(MyAttribute.PLAGIN_FULL_NAME, new Action(delegate () { FacilityUtillGUI.isGUIOn = !FacilityUtillGUI.isGUIOn; }), MyAttribute.PLAGIN_NAME + " : " + ShowCounter.Value.ToString(), MyUtill.ExtractResource(BepInPluginSample.Properties.Resources.icon));
         }
 
         public void OnEnable()
         {
-            MyLog.LogMessage("OnEnable");
+            FacilityUtillMain.MyLog.LogMessage("OnEnable");
 
-            SampleGUI.myWindowRect.load();
+            FacilityUtillGUI.myWindowRect.load();
             SceneManager.sceneLoaded += this.OnSceneLoaded;
         }
-
+        /*
         public void Start()
         {
-            MyLog.LogMessage("Start");            
+            Sample.MyLog.LogMessage("Start");            
         }
-
+        */
         public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
-            SampleGUI.myWindowRect.save();
+            FacilityUtillGUI.myWindowRect.save();
         }
 
         private void Update()
@@ -93,7 +94,7 @@ namespace BepInPluginSample
             if (ShowCounter.Value.IsUp())
             {
                 isGUIOn = !isGUIOn;
-                MyLog.LogMessage("IsUp", ShowCounter.Value.Modifiers, ShowCounter.Value.MainKey);
+                FacilityUtillMain.MyLog.LogMessage("IsUp", ShowCounter.Value.Modifiers, ShowCounter.Value.MainKey);
             }
         }
 
@@ -145,8 +146,8 @@ namespace BepInPluginSample
 
         public void OnDisable()
         {
-            SampleGUI.isCoroutine = false;
-            SampleGUI.myWindowRect.save();
+            FacilityUtillGUI.isCoroutine = false;
+            FacilityUtillGUI.myWindowRect.save();
             SceneManager.sceneLoaded -= this.OnSceneLoaded;
         }
 
@@ -158,7 +159,7 @@ namespace BepInPluginSample
             isCoroutine = true;
             while (isCoroutine)
             {
-                MyLog.LogMessage("MyCoroutine ", ++CoroutineCount);
+                FacilityUtillMain.MyLog.LogMessage("MyCoroutine ", ++CoroutineCount);
                 //yield return null;
                 yield return new WaitForSeconds(1f);
             }
