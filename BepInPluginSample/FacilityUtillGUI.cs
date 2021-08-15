@@ -11,7 +11,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace BepInPluginSample
+namespace COM3D2.FacilityUtill.Plugin
 {
     class FacilityUtillGUI : MonoBehaviour
     {
@@ -60,7 +60,7 @@ namespace BepInPluginSample
             myWindowRect = new MyWindowRect(config, MyAttribute.PLAGIN_FULL_NAME,ho:120);
             IsGUIOn = config.Bind("GUI", "isGUIOn", false);
             ShowCounter = config.Bind("GUI", "isGUIOnKey", new BepInEx.Configuration.KeyboardShortcut(KeyCode.Alpha5, KeyCode.LeftControl));
-            SystemShortcutAPI.AddButton(MyAttribute.PLAGIN_FULL_NAME, new Action(delegate () { FacilityUtillGUI.isGUIOn = !FacilityUtillGUI.isGUIOn; }), MyAttribute.PLAGIN_NAME + " : " + ShowCounter.Value.ToString(), MyUtill.ExtractResource(BepInPluginSample.Properties.Resources.icon));
+            SystemShortcutAPI.AddButton(MyAttribute.PLAGIN_FULL_NAME, new Action(delegate () { FacilityUtillGUI.isGUIOn = !FacilityUtillGUI.isGUIOn; }), MyAttribute.PLAGIN_NAME + " : " + ShowCounter.Value.ToString(), MyUtill.ExtractResource(COM3D2.FacilityUtill.Plugin.Properties.Resources.icon));
         }
 
         public void OnEnable()

@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace BepInPluginSample
+namespace COM3D2.FacilityUtill.Plugin
 {
     internal class FacilityUtill
     {

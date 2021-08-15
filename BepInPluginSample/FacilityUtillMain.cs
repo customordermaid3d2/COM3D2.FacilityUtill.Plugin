@@ -14,7 +14,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace BepInPluginSample
+namespace COM3D2.FacilityUtill.Plugin
 {
     class MyAttribute
     {
