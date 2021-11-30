@@ -50,7 +50,7 @@ namespace COM3D2.FacilityUtill.Plugin
             if (instance == null)
             {
                 instance = parent.AddComponent<FacilityUtillGUI>();
-                FacilityUtillMain.MyLog.LogMessage("GameObjectMgr.Install", instance.name);                
+                FacilityUtillMain.MyLog.LogInfo("GameObjectMgr.Install", instance.name);                
             }
             return instance;
         }
@@ -65,10 +65,10 @@ namespace COM3D2.FacilityUtill.Plugin
 
         public void OnEnable()
         {
-            FacilityUtillMain.MyLog.LogMessage("OnEnable");
+            FacilityUtillMain.MyLog.LogInfo("OnEnable");
 
             FacilityUtillGUI.myWindowRect.load();
-            SceneManager.sceneLoaded += this.OnSceneLoaded;
+            //SceneManager.sceneLoaded += this.OnSceneLoaded;
         }
         /*
         public void Start()
@@ -76,10 +76,10 @@ namespace COM3D2.FacilityUtill.Plugin
             Sample.MyLog.LogMessage("Start");            
         }
         */
-        public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-        {
-            FacilityUtillGUI.myWindowRect.save();
-        }
+        //public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        //{
+        //    FacilityUtillGUI.myWindowRect.save();
+        //}
 
         private void Update()
         {
@@ -94,7 +94,7 @@ namespace COM3D2.FacilityUtill.Plugin
             if (ShowCounter.Value.IsUp())
             {
                 isGUIOn = !isGUIOn;
-                FacilityUtillMain.MyLog.LogMessage("IsUp", ShowCounter.Value.Modifiers, ShowCounter.Value.MainKey);
+                FacilityUtillMain.MyLog.LogInfo("IsUp", ShowCounter.Value.Modifiers, ShowCounter.Value.MainKey);
             }
         }
 
@@ -147,8 +147,8 @@ namespace COM3D2.FacilityUtill.Plugin
         public void OnDisable()
         {
             FacilityUtillGUI.isCoroutine = false;
-            FacilityUtillGUI.myWindowRect.save();
-            SceneManager.sceneLoaded -= this.OnSceneLoaded;
+            //FacilityUtillGUI.myWindowRect.save();
+            //SceneManager.sceneLoaded -= this.OnSceneLoaded;
         }
 
         public static bool isCoroutine = false;
@@ -159,7 +159,7 @@ namespace COM3D2.FacilityUtill.Plugin
             isCoroutine = true;
             while (isCoroutine)
             {
-                FacilityUtillMain.MyLog.LogMessage("MyCoroutine ", ++CoroutineCount);
+                FacilityUtillMain.MyLog.LogInfo("MyCoroutine ", ++CoroutineCount);
                 //yield return null;
                 yield return new WaitForSeconds(1f);
             }

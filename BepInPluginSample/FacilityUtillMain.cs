@@ -19,7 +19,7 @@ namespace COM3D2.FacilityUtill.Plugin
     class MyAttribute
     {
         public const string PLAGIN_NAME = "FacilityUtill";
-        public const string PLAGIN_VERSION = "21.8.14";
+        public const string PLAGIN_VERSION = "21.11.30";
         public const string PLAGIN_FULL_NAME = "COM3D2.FacilityUtill.Plugin";
     }
 
@@ -48,7 +48,7 @@ namespace COM3D2.FacilityUtill.Plugin
         public void Awake()
         {
             MyLog =new MyLog( Logger);
-            MyLog.LogMessage("Awake");
+            MyLog.LogInfo("Awake");
 
             // 단축키 기본값 설정
             //ShowCounter = Config.Bind("KeyboardShortcut", "KeyboardShortcut0", new BepInEx.Configuration.KeyboardShortcut(KeyCode.Alpha5, KeyCode.LeftControl));
@@ -62,9 +62,9 @@ namespace COM3D2.FacilityUtill.Plugin
 
         public void OnEnable()
         {
-            MyLog.LogMessage("OnEnable");
+            MyLog.LogInfo("OnEnable");
 
-            SceneManager.sceneLoaded += this.OnSceneLoaded;
+            //SceneManager.sceneLoaded += this.OnSceneLoaded;
 
             // 하모니 패치
             harmony = Harmony.CreateAndPatchAll(typeof(FacilityUtillPatch));
@@ -76,21 +76,21 @@ namespace COM3D2.FacilityUtill.Plugin
         /// </summary>
         public void Start()
         {
-            MyLog.LogMessage("Start");
+            MyLog.LogInfo("Start");
 
             FacilityUtillGUI.Install(gameObject, Config);
 
             //SystemShortcutAPI.AddButton(MyAttribute.PLAGIN_FULL_NAME, new Action(delegate () { enabled = !enabled; }), MyAttribute.PLAGIN_NAME, MyUtill.ExtractResource(BepInPluginSample.Properties.Resources.icon));
         }
 
-        public string scene_name = string.Empty;
+       // public string scene_name = string.Empty;
 
-        public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-        {
-            MyLog.LogMessage("OnSceneLoaded", scene.name, scene.buildIndex);
-            //  scene.buildIndex 는 쓰지 말자 제발
-            scene_name = scene.name;
-        }
+       // public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+       // {
+       //     MyLog.LogInfo("OnSceneLoaded", scene.name, scene.buildIndex);
+       //     //  scene.buildIndex 는 쓰지 말자 제발
+       //     scene_name = scene.name;
+       // }
 
         /*
         public void FixedUpdate()
@@ -130,9 +130,9 @@ namespace COM3D2.FacilityUtill.Plugin
         */
         public void OnDisable()
         {
-            MyLog.LogMessage("OnDisable");
+            MyLog.LogInfo("OnDisable");
 
-            SceneManager.sceneLoaded -= this.OnSceneLoaded;
+            //SceneManager.sceneLoaded -= this.OnSceneLoaded;
 
             harmony.UnpatchSelf();// ==harmony.UnpatchAll(harmony.Id);
             //harmony.UnpatchAll(); // 정대 사용 금지. 다름 플러그인이 패치한것까지 다 풀려버림
