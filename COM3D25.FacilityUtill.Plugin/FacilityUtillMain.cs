@@ -28,8 +28,6 @@ namespace COM3D2.FacilityUtill.Plugin
     [BepInProcess("COM3D2x64.exe")]
     public class FacilityUtillMain : BaseUnityPlugin
     {
-        // 단축키 설정파일로 연동
-        //private ConfigEntry<BepInEx.Configuration.KeyboardShortcut> ShowCounter;
 
         Harmony harmony;
 
@@ -47,15 +45,8 @@ namespace COM3D2.FacilityUtill.Plugin
         /// </summary>
         public void Awake()
         {
-            MyLog =new MyLog( Logger);
+            MyLog = new MyLog(Logger);
             MyLog.LogInfo("Awake");
-
-            // 단축키 기본값 설정
-            //ShowCounter = Config.Bind("KeyboardShortcut", "KeyboardShortcut0", new BepInEx.Configuration.KeyboardShortcut(KeyCode.Alpha5, KeyCode.LeftControl));
-
-            
-
-            // 기어 메뉴 추가. 이 플러그인 기능 자체를 멈추려면 enabled 를 꺽어야함. 그러면 OnEnable(), OnDisable() 이 작동함
         }
 
 
@@ -69,6 +60,7 @@ namespace COM3D2.FacilityUtill.Plugin
             // 하모니 패치
             harmony = Harmony.CreateAndPatchAll(typeof(FacilityUtillPatch));
 
+            myWindowRect = new MyWindowRect(Config, MyAttribute.PLAGIN_FULL_NAME, MyAttribute.PLAGIN_NAME, "FU", ho: 120);
         }
 
         /// <summary>
@@ -77,57 +69,62 @@ namespace COM3D2.FacilityUtill.Plugin
         public void Start()
         {
             MyLog.LogInfo("Start");
+            ShowCounter = Config.Bind("GUI", "isGUIOnKey", new BepInEx.Configuration.KeyboardShortcut(KeyCode.Alpha5, KeyCode.LeftControl));
 
-            FacilityUtillGUI.Install(gameObject, Config);
-
-            //SystemShortcutAPI.AddButton(MyAttribute.PLAGIN_FULL_NAME, new Action(delegate () { enabled = !enabled; }), MyAttribute.PLAGIN_NAME, MyUtill.ExtractResource(BepInPluginSample.Properties.Resources.icon));
-        }
-
-       // public string scene_name = string.Empty;
-
-       // public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-       // {
-       //     MyLog.LogInfo("OnSceneLoaded", scene.name, scene.buildIndex);
-       //     //  scene.buildIndex 는 쓰지 말자 제발
-       //     scene_name = scene.name;
-       // }
-
-        /*
-        public void FixedUpdate()
-        {
+            SystemShortcutAPI.AddButton(
+                MyAttribute.PLAGIN_FULL_NAME
+                , new Action(delegate ()
+                {
+                    myWindowRect.IsGUIOn = !myWindowRect.IsGUIOn;
+                    FacilityUtillMain.MyLog.LogInfo($"SystemShortcutAPI {myWindowRect.IsGUIOn}");
+                })
+                , MyAttribute.PLAGIN_NAME + " : " + ShowCounter.Value.ToString()
+                , MyUtill.ExtractResource(COM3D25.FacilityUtill.Plugin.Properties.Resources.icon)
+            );
 
         }
 
-        public void Update()
-        {
-           //if (ShowCounter.Value.IsDown())
-           //{
-           //    MyLog.LogMessage("IsDown", ShowCounter.Value.Modifiers, ShowCounter.Value.MainKey);
-           //}
-           //if (ShowCounter.Value.IsPressed())
-           //{
-           //    MyLog.LogMessage("IsPressed", ShowCounter.Value.Modifiers, ShowCounter.Value.MainKey);
-           //}
-           //if (ShowCounter.Value.IsUp())
-           //{
-           //    MyLog.LogMessage("IsUp", ShowCounter.Value.Modifiers, ShowCounter.Value.MainKey);
-           //}
-        }
-
-        public void LateUpdate()
-        {
-
-        }
-
-        
+        private static ConfigEntry<BepInEx.Configuration.KeyboardShortcut> ShowCounter;
+        private static int windowId = new System.Random().Next();
+        public static MyWindowRect myWindowRect;
+        private static Vector2 scrollPosition;
 
         public void OnGUI()
         {
-          
+            if (!myWindowRect.IsGUIOn)
+                return;
+
+            myWindowRect.WindowRect = GUILayout.Window(windowId, myWindowRect.WindowRect, WindowFunction, "", GUI.skin.box);
         }
 
+        public void WindowFunction(int id)
+        {
+            GUI.enabled = true;
 
-        */
+            GUILayout.BeginHorizontal();
+            GUILayout.Label(myWindowRect.windowName, GUILayout.Height(20));
+            GUILayout.FlexibleSpace();
+            if (GUILayout.Button("-", GUILayout.Width(20), GUILayout.Height(20))) { myWindowRect.IsOpen = !myWindowRect.IsOpen; }
+            if (GUILayout.Button("x", GUILayout.Width(20), GUILayout.Height(20))) { myWindowRect.IsGUIOn = false; }
+            GUILayout.EndHorizontal();
+
+            if (!myWindowRect.IsOpen)
+            {
+            }
+            else
+            {
+                scrollPosition = GUILayout.BeginScrollView(scrollPosition);
+
+                if (GUILayout.Button("Facility Auot Set - Random")) FacilityUtill.SetFacilityAll(true);
+                if (GUILayout.Button("Facility Auot Set - sequential")) FacilityUtill.SetFacilityAll(false);
+                if (GUILayout.Button("Facility exp max")) FacilityUtill.SetMaxExp();
+
+                GUILayout.EndScrollView();
+            }
+            GUI.enabled = true;
+            GUI.DragWindow(); // 창 드레그 가능하게 해줌. 마지막에만 넣어야함
+        }
+
         public void OnDisable()
         {
             MyLog.LogInfo("OnDisable");
@@ -137,19 +134,6 @@ namespace COM3D2.FacilityUtill.Plugin
             harmony.UnpatchSelf();// ==harmony.UnpatchAll(harmony.Id);
             //harmony.UnpatchAll(); // 정대 사용 금지. 다름 플러그인이 패치한것까지 다 풀려버림
         }
-        /*
-        public void Pause()
-        {
-            MyLog.LogMessage("Pause");
-        }
-
-        public void Resume()
-        {
-            MyLog.LogMessage("Resume");
-        }
-        */
-
-
 
 
     }
