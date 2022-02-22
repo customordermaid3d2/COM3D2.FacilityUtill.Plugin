@@ -27,7 +27,7 @@ namespace COM3D2.FacilityUtill.Plugin
 
         // 위치 저장용 테스트 json
         public static MyWindowRect myWindowRect;
-
+        /*
         public static bool IsOpen
         {
             get => myWindowRect.IsOpen;
@@ -42,7 +42,7 @@ namespace COM3D2.FacilityUtill.Plugin
             get => IsGUIOn.Value;
             set => IsGUIOn.Value = value;
         }
-
+        */
         internal static FacilityUtillGUI Install(GameObject parent,ConfigFile config)
         {
             FacilityUtillGUI. config = config;
@@ -58,9 +58,9 @@ namespace COM3D2.FacilityUtill.Plugin
         public void Awake()
         {
             myWindowRect = new MyWindowRect(config, MyAttribute.PLAGIN_FULL_NAME,ho:120);
-            IsGUIOn = config.Bind("GUI", "isGUIOn", false);
+            //IsGUIOn = config.Bind("GUI", "isGUIOn", false);
             ShowCounter = config.Bind("GUI", "isGUIOnKey", new BepInEx.Configuration.KeyboardShortcut(KeyCode.Alpha5, KeyCode.LeftControl));
-            SystemShortcutAPI.AddButton(MyAttribute.PLAGIN_FULL_NAME, new Action(delegate () { FacilityUtillGUI.isGUIOn = !FacilityUtillGUI.isGUIOn; }), MyAttribute.PLAGIN_NAME + " : " + ShowCounter.Value.ToString(), MyUtill.ExtractResource(COM3D2.FacilityUtill.Plugin.Properties.Resources.icon));
+            SystemShortcutAPI.AddButton(MyAttribute.PLAGIN_FULL_NAME, new Action(delegate () { myWindowRect.IsGUIOn = !myWindowRect.IsGUIOn; }), MyAttribute.PLAGIN_NAME + " : " + ShowCounter.Value.ToString(), MyUtill.ExtractResource(COM3D2.FacilityUtill.Plugin.Properties.Resources.icon));
         }
 
         public void OnEnable()
@@ -93,14 +93,14 @@ namespace COM3D2.FacilityUtill.Plugin
             //}
             if (ShowCounter.Value.IsUp())
             {
-                isGUIOn = !isGUIOn;
+                myWindowRect.IsGUIOn = !myWindowRect.IsGUIOn;
                 FacilityUtillMain.MyLog.LogInfo("IsUp", ShowCounter.Value.Modifiers, ShowCounter.Value.MainKey);
             }
         }
 
         public void OnGUI()
         {
-            if (!isGUIOn)
+            if (!myWindowRect.IsGUIOn)
                 return;
 
             //GUI.skin.window = ;
@@ -114,13 +114,13 @@ namespace COM3D2.FacilityUtill.Plugin
             GUI.enabled = true;
 
             GUILayout.BeginHorizontal();
-            GUILayout.Label(MyAttribute.PLAGIN_NAME + " " + ShowCounter.Value.ToString(),GUILayout.Height(20));
+            GUILayout.Label(myWindowRect.windowName);
             GUILayout.FlexibleSpace();
-            if (GUILayout.Button("-", GUILayout.Width(20), GUILayout.Height(20))) { IsOpen = !IsOpen; }
-            if (GUILayout.Button("x", GUILayout.Width(20), GUILayout.Height(20))) { isGUIOn = false; }
+            if (GUILayout.Button("-", GUILayout.Width(20), GUILayout.Height(20))) { myWindowRect.IsOpen = !myWindowRect.IsOpen; }
+            if (GUILayout.Button("x", GUILayout.Width(20), GUILayout.Height(20))) { myWindowRect.IsGUIOn = false; }
             GUILayout.EndHorizontal();
 
-            if (!IsOpen)
+            if (!myWindowRect.IsOpen)
             {
 
             }

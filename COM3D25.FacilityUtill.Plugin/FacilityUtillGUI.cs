@@ -81,7 +81,7 @@ namespace COM3D2.FacilityUtill.Plugin
         //    FacilityUtillGUI.myWindowRect.save();
         //}
 
-        private void Update()
+        public void Update()
         {
             //if (ShowCounter.Value.IsDown())
             //{
@@ -114,7 +114,7 @@ namespace COM3D2.FacilityUtill.Plugin
             GUI.enabled = true;
 
             GUILayout.BeginHorizontal();
-            GUILayout.Label(MyAttribute.PLAGIN_NAME + " " + ShowCounter.Value.ToString(),GUILayout.Height(20));
+            GUILayout.Label(myWindowRect.windowName, GUILayout.Height(20));
             GUILayout.FlexibleSpace();
             if (GUILayout.Button("-", GUILayout.Width(20), GUILayout.Height(20))) { myWindowRect.IsOpen = !myWindowRect.IsOpen; }
             if (GUILayout.Button("x", GUILayout.Width(20), GUILayout.Height(20))) { myWindowRect.IsGUIOn = false; }
