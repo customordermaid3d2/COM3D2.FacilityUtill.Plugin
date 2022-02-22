@@ -45,7 +45,7 @@ namespace COM3D2.FacilityUtill.Plugin
         /// </summary>
         public void Awake()
         {
-            MyLog = new MyLog(Logger);
+            MyLog = new MyLog(Logger,Config);
             MyLog.LogInfo("Awake");
         }
 

@@ -88,7 +88,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FacilityUtill.cs" />
-    <Compile Include="FacilityUtillGUI.cs" />
     <Compile Include="FacilityUtillMain.cs" />
     <Compile Include="FacilityUtillPatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
