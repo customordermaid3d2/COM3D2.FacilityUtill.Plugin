@@ -1,7 +1,7 @@
 ﻿using BepInEx;
 using BepInEx.Configuration;
 
-using COM3D25.LillyUtill;
+using COM3D2.LillyUtill;
 using COM3D2API;
 using HarmonyLib;
 using Newtonsoft.Json;
@@ -79,7 +79,7 @@ namespace COM3D2.FacilityUtill.Plugin
                     FacilityUtillMain.MyLog.LogInfo($"SystemShortcutAPI {myWindowRect.IsGUIOn}");
                 })
                 , MyAttribute.PLAGIN_NAME + " : " + ShowCounter.Value.ToString()
-                , MyUtill.ExtractResource(COM3D25.FacilityUtill.Plugin.Properties.Resources.icon)
+                , MyUtill.ExtractResource(COM3D2.FacilityUtill.Plugin.Properties.Resources.icon)
             );
 
         }
