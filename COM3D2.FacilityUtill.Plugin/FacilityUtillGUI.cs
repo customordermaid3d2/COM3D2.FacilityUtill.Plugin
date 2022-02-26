@@ -57,7 +57,7 @@ namespace COM3D2.FacilityUtill.Plugin
 
         public void Awake()
         {
-            myWindowRect = new MyWindowRect(config, MyAttribute.PLAGIN_FULL_NAME,ho:120);
+            myWindowRect = new MyWindowRect(config, MyAttribute.PLAGIN_FULL_NAME, MyAttribute.PLAGIN_NAME,"FU", ho:120);
             //IsGUIOn = config.Bind("GUI", "isGUIOn", false);
             ShowCounter = config.Bind("GUI", "isGUIOnKey", new BepInEx.Configuration.KeyboardShortcut(KeyCode.Alpha5, KeyCode.LeftControl));
             SystemShortcutAPI.AddButton(MyAttribute.PLAGIN_FULL_NAME, new Action(delegate () { myWindowRect.IsGUIOn = !myWindowRect.IsGUIOn; }), MyAttribute.PLAGIN_NAME + " : " + ShowCounter.Value.ToString(), MyUtill.ExtractResource(COM3D2.FacilityUtill.Plugin.Properties.Resources.icon));
