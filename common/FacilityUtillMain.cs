@@ -1,7 +1,6 @@
 ﻿using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
-using COM3D2.LillyUtill;
 using COM3D2API;
 using HarmonyLib;
 using LillyUtill.MyWindowRect;
@@ -20,7 +19,7 @@ namespace COM3D2.FacilityUtill.Plugin
     class MyAttribute
     {
         public const string PLAGIN_NAME = "FacilityUtill";
-        public const string PLAGIN_VERSION = "22.2.22";
+        public const string PLAGIN_VERSION = "22.3.13";
         public const string PLAGIN_FULL_NAME = "COM3D2.FacilityUtill.Plugin";
     }
 
@@ -34,9 +33,9 @@ namespace COM3D2.FacilityUtill.Plugin
         internal static ManualLogSource log;
 
         private static ConfigEntry<BepInEx.Configuration.KeyboardShortcut> ShowCounter;
-        //private static int windowId = new System.Random().Next();
+        
         public static WindowRectUtill myWindowRect;
-        private static Vector2 scrollPosition;
+        //private static Vector2 scrollPosition;
 
         public FacilityUtillMain()
         {
@@ -63,11 +62,7 @@ namespace COM3D2.FacilityUtill.Plugin
 
             SystemShortcutAPI.AddButton(
                 MyAttribute.PLAGIN_FULL_NAME
-                , new Action(delegate ()
-                {
-                    myWindowRect.IsGUIOn = !myWindowRect.IsGUIOn;
-                    FacilityUtillMain.log.LogInfo($"SystemShortcutAPI {myWindowRect.IsGUIOn}");
-                })
+                , () => { myWindowRect.IsGUIOnOffChg(); }
                 , MyAttribute.PLAGIN_NAME + " : " + ShowCounter.Value.ToString()
                 , Properties.Resources.icon
             );

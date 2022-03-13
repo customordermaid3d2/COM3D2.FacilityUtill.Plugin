@@ -50,8 +50,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="COM3D2.API">
-      <HintPath>lib\COM3D2.API.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>H:\COM3D2\BepinEx\plugins\COM3D2.API.dll</HintPath>
     </Reference>
     <Reference Include="COM3D2.MaidActiveUtill">
       <HintPath>H:\COM3D2\BepinEx\plugins\COM3D2.MaidActiveUtill.dll</HintPath>
@@ -80,15 +79,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FacilityUtill.cs" />
+    <Compile Include="..\common\FacilityUtill.cs">
+      <Link>FacilityUtill.cs</Link>
+    </Compile>
+    <Compile Include="..\common\FacilityUtillMain.cs">
+      <Link>FacilityUtillMain.cs</Link>
+    </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="FacilityUtillMain.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="FacilityUtillPatch.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
