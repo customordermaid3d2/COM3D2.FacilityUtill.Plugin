@@ -1,9 +1,10 @@
 ﻿using BepInEx;
 using BepInEx.Configuration;
-
+using BepInEx.Logging;
 using COM3D2.LillyUtill;
 using COM3D2API;
 using HarmonyLib;
+using LillyUtill.MyWindowRect;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
@@ -29,38 +30,27 @@ namespace COM3D2.FacilityUtill.Plugin
     public class FacilityUtillMain : BaseUnityPlugin
     {
 
-        Harmony harmony;
-
         public static FacilityUtillMain sample;
-        public static MyLog MyLog;
+        internal static ManualLogSource log;
 
+        private static ConfigEntry<BepInEx.Configuration.KeyboardShortcut> ShowCounter;
+        //private static int windowId = new System.Random().Next();
+        public static WindowRectUtill myWindowRect;
+        private static Vector2 scrollPosition;
 
         public FacilityUtillMain()
         {
             sample = this;
+            log = Logger;
         }
 
         /// <summary>
         ///  게임 실행시 한번만 실행됨
         /// </summary>
         public void Awake()
-        {
-            MyLog = new MyLog(Logger,Config);
-            MyLog.LogInfo("Awake");
-        }
-
-
-
-        public void OnEnable()
-        {
-            MyLog.LogInfo("OnEnable");
-
-            //SceneManager.sceneLoaded += this.OnSceneLoaded;
-
-            // 하모니 패치
-            harmony = Harmony.CreateAndPatchAll(typeof(FacilityUtillPatch));
-
-            myWindowRect = new MyWindowRect(Config, MyAttribute.PLAGIN_FULL_NAME, MyAttribute.PLAGIN_NAME, "FU", ho: 120);
+        {            
+            log.LogInfo("Awake");
+            myWindowRect = new WindowRectUtill(WindowFunctionBody, Config, Logger,  MyAttribute.PLAGIN_NAME, "FU", ho: 120);
         }
 
         /// <summary>
@@ -68,7 +58,7 @@ namespace COM3D2.FacilityUtill.Plugin
         /// </summary>
         public void Start()
         {
-            MyLog.LogInfo("Start");
+            log.LogInfo("Start");
             ShowCounter = Config.Bind("GUI", "isGUIOnKey", new BepInEx.Configuration.KeyboardShortcut(KeyCode.Alpha5, KeyCode.LeftControl));
 
             SystemShortcutAPI.AddButton(
@@ -76,27 +66,24 @@ namespace COM3D2.FacilityUtill.Plugin
                 , new Action(delegate ()
                 {
                     myWindowRect.IsGUIOn = !myWindowRect.IsGUIOn;
-                    FacilityUtillMain.MyLog.LogInfo($"SystemShortcutAPI {myWindowRect.IsGUIOn}");
+                    FacilityUtillMain.log.LogInfo($"SystemShortcutAPI {myWindowRect.IsGUIOn}");
                 })
                 , MyAttribute.PLAGIN_NAME + " : " + ShowCounter.Value.ToString()
-                , MyUtill.ExtractResource(COM3D2.FacilityUtill.Plugin.Properties.Resources.icon)
+                , Properties.Resources.icon
             );
-
         }
-
-        private static ConfigEntry<BepInEx.Configuration.KeyboardShortcut> ShowCounter;
-        private static int windowId = new System.Random().Next();
-        public static MyWindowRect myWindowRect;
-        private static Vector2 scrollPosition;
 
         public void OnGUI()
         {
+            myWindowRect.OnGUI();
+            /*
             if (!myWindowRect.IsGUIOn)
                 return;
 
             myWindowRect.WindowRect = GUILayout.Window(windowId, myWindowRect.WindowRect, WindowFunction, "", GUI.skin.box);
+            */
         }
-
+        /*
         public void WindowFunction(int id)
         {
             GUI.enabled = true;
@@ -115,26 +102,20 @@ namespace COM3D2.FacilityUtill.Plugin
             {
                 scrollPosition = GUILayout.BeginScrollView(scrollPosition);
 
-                if (GUILayout.Button("Facility Auot Set - Random")) FacilityUtill.SetFacilityAll(true);
-                if (GUILayout.Button("Facility Auot Set - sequential")) FacilityUtill.SetFacilityAll(false);
-                if (GUILayout.Button("Facility exp max")) FacilityUtill.SetMaxExp();
+                WindowFunctionBody(id);
 
                 GUILayout.EndScrollView();
             }
             GUI.enabled = true;
             GUI.DragWindow(); // 창 드레그 가능하게 해줌. 마지막에만 넣어야함
         }
+        */
 
-        public void OnDisable()
+        private void WindowFunctionBody(int id)
         {
-            MyLog.LogInfo("OnDisable");
-
-            //SceneManager.sceneLoaded -= this.OnSceneLoaded;
-
-            harmony.UnpatchSelf();// ==harmony.UnpatchAll(harmony.Id);
-            //harmony.UnpatchAll(); // 정대 사용 금지. 다름 플러그인이 패치한것까지 다 풀려버림
+            if (GUILayout.Button("Facility Auot Set - Random")) FacilityUtill.SetFacilityAll(true);
+            if (GUILayout.Button("Facility Auot Set - sequential")) FacilityUtill.SetFacilityAll(false);
+            if (GUILayout.Button("Facility exp max")) FacilityUtill.SetMaxExp();
         }
-
-
     }
 }
