@@ -11,20 +11,37 @@ namespace COM3D2.FacilityUtill.Plugin
         public static List<Facility.FacilityStatus> listbak;
         public static List<Facility.FacilityStatus> list;
 
+        internal static DataArray<int, SimpleExperienceSystem> facilityExpArray;
+
+        public static DataArray<int, SimpleExperienceSystem> FacilityExpArray
+        {
+            get
+            {
+                //if (facilityExpArray == null)
+                //{
+                //    facilityExpArray = Traverse.Create(GameMain.Instance.FacilityMgr).Field("m_FacilityExpArray").GetValue<DataArray<int, SimpleExperienceSystem>>();
+                //}
+                return facilityExpArray;
+            }
+            set => facilityExpArray = value;
+        }
+
         public static void SetFacilityAll(bool random)
         {
-
-
             SetFacilityListInit();
 
             //List<Facility.FacilityStatus> list = new();
+            for (int i = 2; i < GameMain.Instance.FacilityMgr.FacilityCountMax; i+=listbak.Count)
+            {
+                list.AddRange(listbak);
+            }
 
             for (int i = 2; i < GameMain.Instance.FacilityMgr.FacilityCountMax; i++)
             {
-                if (list.Count == 0)
-                {
-                    list.AddRange(listbak);
-                }
+                //if (list.Count == 0)
+                //{
+                //    list.AddRange(listbak);
+                //}
 
                 Facility.FacilityStatus item;
                 if (random)
@@ -34,46 +51,14 @@ namespace COM3D2.FacilityUtill.Plugin
 
                 Facility facility = GameMain.Instance.FacilityMgr.CreateNewFacility(item.typeID);
 
-
                 GameMain.Instance.FacilityMgr.SetFacility(i, facility);
 
                 list.Remove(item);
-
             }
 
             FacilityUtill.SetMaxExp();
         }
 
-        private static DataArray<int, SimpleExperienceSystem> facilityExpArray;
-
-        public static DataArray<int, SimpleExperienceSystem> FacilityExpArray
-        {
-            get
-            {
-                if (facilityExpArray == null)
-                {
-                    facilityExpArray = Traverse.Create(GameMain.Instance.FacilityMgr).Field("m_FacilityExpArray").GetValue<DataArray<int, SimpleExperienceSystem>>();
-                }
-                return facilityExpArray;
-            }
-            set => facilityExpArray = value;
-        }
-
-        public static void SetMaxExp()
-        {
-            if (FacilityExpArray == null)
-            {
-                //FacilityManagerPatch.m_FacilityExpArray= AccessTools.Field(typeof(FacilityManager), "m_FacilityAchievementList");
-
-                return;
-            }
-            foreach (KeyValuePair<int, SimpleExperienceSystem> item in FacilityExpArray.Copy())
-            {
-                SimpleExperienceSystem experienceSystem = item.Value;
-                experienceSystem.AddExp(experienceSystem.GetMaxLevelNeedExp());
-            }
-
-        }
 
         private static void SetFacilityListInit()
         {
@@ -99,6 +84,23 @@ namespace COM3D2.FacilityUtill.Plugin
             }
             list.Clear();
         }
+
+        public static void SetMaxExp()
+        {
+            if (FacilityExpArray == null)
+            {
+                //FacilityManagerPatch.m_FacilityExpArray= AccessTools.Field(typeof(FacilityManager), "m_FacilityAchievementList");
+
+                return;
+            }
+            foreach (KeyValuePair<int, SimpleExperienceSystem> item in FacilityExpArray.Copy())
+            {
+                SimpleExperienceSystem experienceSystem = item.Value;
+                experienceSystem.AddExp(experienceSystem.GetMaxLevelNeedExp());
+            }
+
+        }
+
 
 
     }

@@ -2,6 +2,7 @@
 using BepInEx.Configuration;
 using BepInEx.Logging;
 using COM3D2API;
+using FacilityFlag;
 using HarmonyLib;
 using LillyUtill.MyWindowRect;
 using Newtonsoft.Json;
@@ -66,6 +67,8 @@ namespace COM3D2.FacilityUtill.Plugin
                 , MyAttribute.PLAGIN_NAME + " : " + ShowCounter.Value.ToString()
                 , Properties.Resources.icon
             );
+
+            FacilityUtill.facilityExpArray = Traverse.Create(GameMain.Instance.FacilityMgr).Field("m_FacilityExpArray").GetValue<DataArray<int, SimpleExperienceSystem>>();
         }
 
         public void OnGUI()
